@@ -198,3 +198,41 @@ for minilote in test_ds:
             print(etiquetas[np.argmax(y_predicha)], "->", etiquetas[np.argmax(y_real)])
         else:
             print(etiquetas[np.argmax(y_predicha)], "->", etiquetas[np.argmax(y_real)], "✘")
+
+# PRODUCTION ----------------------------------------------
+
+#from matplotlib.pyplot import imshow
+import numpy as np
+#from PIL import Image
+import tensorflow.keras
+
+# SAVING --------------------------------------------------
+#model.save_model("mimodelo.h5")
+
+
+# LOADING --------------------------------------------------
+#model = tensorflow.keras.models.load_model("mimodelo.h5")
+
+
+etiquetas=['Air Hockey', 'Baseball', 'Basketball', 'Football', 'F1 Racing', 'Golf', 'Hockey','Judo', 'Motorcycle Racing', 'Nascar Racing',  'Rugby', 'Tennis']
+%matplotlib inline
+print("ETIQUETA PREDICHA -> ETIQUETA REAL")
+for minilote in test_ds:
+    prediccion_minilote = model.predict(minilote[0].numpy())
+    etiqueta_real_minilote = minilote[1].numpy()
+    for y_predicha, y_real in zip(np.round(prediccion_minilote,3), etiqueta_real_minilote):
+        if np.argmax(y_predicha) == np.argmax(y_real):
+            print(etiquetas[np.argmax(y_predicha)], "->", etiquetas[np.argmax(y_real)])
+        else:
+            print(etiquetas[np.argmax(y_predicha)], "->", etiquetas[np.argmax(y_real)], "✘")
+
+# sacar el porcentaje de aciertos
+aciertos = 0
+for minilote in test_ds:
+    prediccion_minilote = model.predict(minilote[0].numpy())
+    etiqueta_real_minilote = minilote[1].numpy()
+    for y_predicha, y_real in zip(np.round(prediccion_minilote,3), etiqueta_real_minilote):
+        if np.argmax(y_predicha) == np.argmax(y_real):
+            aciertos += 1
+porcentaje_aciertos = aciertos / len(test_ds)
+print("Porcentaje de aciertos:", porcentaje_aciertos, "%")
